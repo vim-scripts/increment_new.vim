@@ -1,0 +1,90 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=1199
+
+This is a great (I think) improvement of the plugin increment.vim made by William Natter (natter at magma.ca) (vimscript #842). 
+
+I tried to contact William, but his mailbox does not exist... So here it goes.
+
+As William wrote:
+"This is a handy plugin that makes easy replacing your favorite pattern ("@" by default) with a sequence of incremented values using the "Inc" command.  "
+
+Besides what the original script can do, it has two new features:
+    a) Now you are able to search for a pattern and replace the Nth word from the beginning of the line with the incremental number. 
+    b) And also you can get a confirmation message before change.
+
+The help file is also greatly improved.
+
+Here is an example:
+
+       You have: (beginning with spaces only)
+           ----- cut -----
+                   LMsgInstall6 = 7; // @
+                 LMsgInstall7 = 8;   // @
+               LMsgInstall8 = 9;     // @
+
+               {STANDALONE}
+               LErrConnectionStandAlone1 = 10; //THIS
+               LErrConnectionStandAlone3 = 7; //THIS
+               LErrConnectionStandAlone5 = 12; //THIS
+           {some text}
+               LMsgExitConfirm = 30;
+           ...
+           ----- cut -----
+
+       You do: (with confirmation) 
+           :'<,'>Inc p^\ *\\\<\[A-Za-z0-9_]*\\\>\ =\ [0-9]* w3 i25 s100 c
+                                   (Note that I had to use tree "\" before the "<" sign. Since Vim 7 the "<" and ">" have to be skiped by a "\")
+
+       You get:
+           ----- cut -----
+                   LMsgInstall6 = 100; // @
+                 LMsgInstall7 = 125;   // @
+               LMsgInstall8 = 150;     // @
+
+               {STANDALONE}
+               LErrConnectionStandAlone1 = 175; //THIS
+               LErrConnectionStandAlone3 = 200; //THIS
+               LErrConnectionStandAlone5 = 225; //THIS
+           {some text}
+               LMsgExitConfirm = 250;
+           ...
+           ----- cut -----
+
+       Then you do: (without confirmation)
+           :'<,'>Inc pTHIS w3 i3 s5
+
+       You get:
+           ----- cut -----
+                   LMsgInstall6 = 100; // @
+                 LMsgInstall7 = 125;   // @
+               LMsgInstall8 = 150;     // @
+
+               {STANDALONE}
+               LErrConnectionStandAlone1 = 5; //THIS
+               LErrConnectionStandAlone3 = 8; //THIS
+               LErrConnectionStandAlone5 = 11; //THIS
+           {some text}
+               LMsgExitConfirm = 250;
+           ...
+           ----- cut -----
+
+       Then you do: (without confirmation)
+           :'<,'>Inc
+
+       You get:
+           ----- cut -----
+                   LMsgInstall6 = 100; // 0
+                 LMsgInstall7 = 125;   // 1
+               LMsgInstall8 = 150;     // 2
+
+               {STANDALONE}
+               LErrConnectionStandAlone1 = 5; //THIS
+               LErrConnectionStandAlone3 = 8; //THIS
+               LErrConnectionStandAlone5 = 11; //THIS
+           {some text}
+               LMsgExitConfirm = 250;
+           ...
+           ----- cut -----
+
+Hope it helps.
+
+Keywords: Inc Increment increment increment.vimnumber numbers num replace substitute subst pattern regex
